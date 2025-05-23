@@ -29,14 +29,14 @@ Control your mouse using your webcam and a yellow-colored object with OpenCV. Pe
 
 ## 🚀 Quick Installation
 
-### 🪟 Windows
+### Windows
 ```bash
 git clone https://github.com/KevinCerdaa/FruitNinja_Tracker
 cd FruitNinja_Tracker
 install.bat
 ```
 
-### 🐧 Linux/Mac
+### Linux/Mac
 ```bash
 git clone https://github.com/KevinCerdaa/FruitNinja_Tracker
 cd FruitNinja_Tracker
