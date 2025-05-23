@@ -4,6 +4,7 @@ echo SLICER FOR FRUIT NINJA - BY KEVIN CERDA AND JONATHAN RUAN
 echo =========================================================
 echo.
 
+REM === Verificar que Python esté instalado ===
 echo Checking if Python is installed...
 python --version >nul 2>&1
 if errorlevel 1 (
@@ -13,6 +14,7 @@ if errorlevel 1 (
     exit /b
 )
 
+REM === Preguntar si se desea instalar dependencias ===
 echo.
 echo Do you want to install the dependencies? (y/n)
 set /p install= 
@@ -21,10 +23,29 @@ if /i "%install%"=="y" (
     echo.
     echo Installing dependencies...
     echo The following will be installed:
-    echo - OpenCV
+    echo - opencv-python
     echo - pyautogui
     echo - numpy
     echo.
+
+    REM === Crear entorno virtual si no existe ===
+    if not exist "env" (
+        echo Creating virtual environment...
+        python -m venv env
+    )
+
+    REM === Activar entorno virtual ===
+    call env\Scripts\activate.bat
+
+    REM === Actualizar pip y setuptools ===
+    echo Updating pip and setuptools...
+    python -m pip install --upgrade pip setuptools
+
+    REM === Instalar distutils si es necesario ===
+    echo Installing distutils if required...
+    pip install distutils >nul 2>&1
+
+    REM === Instalar requerimientos ===
     pip install -r requirements.txt
     if errorlevel 1 (
         echo.
@@ -34,6 +55,7 @@ if /i "%install%"=="y" (
         pause
         exit /b
     )
+
     echo.
     echo ================================================
     echo   INSTALLATION COMPLETED SUCCESSFULLY!
