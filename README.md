@@ -29,6 +29,6 @@ Control your mouse using your webcam and a yellow-colored object with OpenCV. Pe
 ## 🚀 Quick Installation (Windows)
 
 ```bash
-git clone https://github.com/KevinCerdaa/FruitNinja_Tracker
-cd FruitNinja_Tracker
+git clone https://github.com/KevinCerdaa/Fruit-Slicer-Tracker
+cd Fruit-Slicer-Tracker
 install.bat
