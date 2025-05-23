@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import pyautogui
+import time  # Añadimos import de time
 
 # Código hecho por Kevin Cerda y Jonathan Ruan
 
@@ -16,6 +17,10 @@ screenWidth, screenHeight = pyautogui.size()
 # Variables para control del mouse
 isLeftClickPressed = False
 lastCenterX, lastCenterY = 0, 0
+
+# Tiempo de inicio del programa
+startTime = time.time()
+clickDelay = 10  # Segundos de espera antes de activar clicks
 
 fristLowerColor = np.array([25, 100, 20])
 fristUpperColor = np.array([35, 255, 255])
@@ -76,18 +81,26 @@ while True:
         try:
             pyautogui.moveTo(mouseX, mouseY)
             
-            # Mantener click izquierdo presionado si no estaba ya presionado
-            if not isLeftClickPressed:
-                pyautogui.mouseDown(button='left')
-                isLeftClickPressed = True
-                
+            # Verificar si ya pasaron los 10 segundos antes de permitir clicks
+            if time.time() - startTime >= clickDelay:
+                # Mantener click izquierdo presionado si no estaba ya presionado
+                if not isLeftClickPressed:
+                    pyautogui.mouseDown(button='left')
+                    isLeftClickPressed = True
+            
         except pyautogui.FailSafeException:
             print("Movimiento del mouse detenido por seguridad")
             break
         
         cv2.circle(frame, (centerX, centerY), 5, (238, 64, 255), -1)
         font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(frame, "Sword is ready!", (centerX, centerY), font, 1, (247, 80, 47), 2)
+        
+        # Mostrar mensaje de espera o "Sword is ready!" según el tiempo transcurrido
+        if time.time() - startTime < clickDelay:
+            timeLeft = int(clickDelay - (time.time() - startTime))
+            cv2.putText(frame, f"Espera {timeLeft} segundos...", (centerX, centerY), font, 1, (247, 80, 47), 2)
+        else:
+            cv2.putText(frame, "Sword is ready!", (centerX, centerY), font, 1, (247, 80, 47), 2)
         
         # Mostrar coordenadas del mouse en la imagen
         cv2.putText(frame, f"Mouse: ({mouseX}, {mouseY})", (10, 30), font, 0.7, (0, 255, 0), 2)
@@ -102,7 +115,17 @@ while True:
             isLeftClickPressed = False
 
     cv2.putText(frame, "Presiona 'q' para salir", (10, frameHeight - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 1)
-    cv2.imshow("Normal WebCam", frame) # Camara normal
+    
+    # Redimensionar el frame para la visualización
+    displayWidth = 550
+    aspectRatio = frameWidth / frameHeight
+    displayHeight = int(displayWidth / aspectRatio)
+    displayFrame = cv2.resize(frame, (displayWidth, displayHeight))
+    
+    # Crear y posicionar la ventana en la esquina superior derecha
+    cv2.namedWindow("Normal WebCam")
+    cv2.moveWindow("Normal WebCam", screenWidth - displayWidth - 30, 0)
+    cv2.imshow("Normal WebCam", displayFrame) # Camara normal
     # cv2.imshow("Mask Color", maskColor) Descomentar para ver máscara
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
