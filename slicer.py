@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 import pyautogui
 
+# Código hecho por Kevin Cerda y Jonathan Ruan
+
 # Configuración de pyautogui para mayor seguridad
 pyautogui.FAILSAFE = True  # Mover mouse a esquina superior izquierda para detener
 pyautogui.PAUSE = 0.01     # Pequeña pausa entre comandos
@@ -100,8 +102,8 @@ while True:
             isLeftClickPressed = False
 
     cv2.putText(frame, "Presiona 'q' para salir", (10, frameHeight - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 1)
-    cv2.imshow("Normal WebCam", frame)
-    cv2.imshow("Mask Color", maskColor)
+    cv2.imshow("Normal WebCam", frame) # Camara normal
+    # cv2.imshow("Mask Color", maskColor) Descomentar para ver máscara
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
