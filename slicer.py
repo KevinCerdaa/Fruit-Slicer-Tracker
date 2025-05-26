@@ -117,14 +117,18 @@ while True:
     cv2.putText(frame, "Presiona 'q' para salir", (10, frameHeight - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 1)
     
     # Redimensionar el frame para la visualización
-    displayWidth = 550
-    aspectRatio = frameWidth / frameHeight
-    displayHeight = int(displayWidth / aspectRatio)
+    displayWidth = 300  # Volvemos a 300 para un tamaño más manejable
+    displayHeight = int(frame.shape[0] * displayWidth / frame.shape[1])
     displayFrame = cv2.resize(frame, (displayWidth, displayHeight))
     
+    # Asegurar que la ventana se mantenga en el monitor principal
+    safeX = max(0, min(screenWidth - displayWidth - 10, screenWidth - displayWidth - 30))
+    safeY = 0
+    
     # Crear y posicionar la ventana en la esquina superior derecha
-    cv2.namedWindow("Normal WebCam")
-    cv2.moveWindow("Normal WebCam", screenWidth - displayWidth - 30, 0)
+    cv2.namedWindow("Normal WebCam", cv2.WINDOW_GUI_EXPANDED | cv2.WINDOW_KEEPRATIO | cv2.WINDOW_AUTOSIZE)
+    cv2.setWindowProperty("Normal WebCam", cv2.WND_PROP_TOPMOST, 1)
+    cv2.moveWindow("Normal WebCam", safeX, safeY)
     cv2.imshow("Normal WebCam", displayFrame) # Camara normal
     # cv2.imshow("Mask Color", maskColor) Descomentar para ver máscara
     if cv2.waitKey(1) & 0xFF == ord('q'):
